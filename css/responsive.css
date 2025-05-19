@@ -1,0 +1,79 @@
+/* Responsive Styles */
+
+/* Große Bildschirme (Laptops, Desktops) */
+@media screen and (max-width: 1200px) {
+  .container {
+    width: 95%;
+  }
+}
+
+/* Mittlere Bildschirme (Tablets) */
+@media screen and (max-width: 992px) {
+  .container {
+    width: 90%;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Kleine Bildschirme (Smartphones) */
+@media screen and (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    z-index: 100;
+    box-shadow: var(--box-shadow);
+  }
+
+  .nav-menu.active {
+    max-height: 300px;
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav-menu li {
+    margin: var(--spacing-xs) 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Sehr kleine Bildschirme */
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    width: 95%;
+  }
+}

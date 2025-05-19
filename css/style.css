@@ -41,23 +41,24 @@
 }
 
 body {
-  font-family: var(--font-primary); /* Geändert */
+  font-family: var(--font-primary);
   line-height: 1.6;
-  color: var(--text-color); /* Geändert */
+  color: var(--text-color);
 }
 
 .container {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-md); /* Geändert */
+  padding: 0 var(--spacing-md);
 }
 
 /* Header & Navigation */
 header {
   background: white;
-  padding: var(--spacing-md) 0; /* Geändert */
-  box-shadow: var(--box-shadow); /* Geändert */
+  padding: var(--spacing-md) 0;
+  box-shadow: var(--box-shadow);
+  position: relative;
 }
 
 nav {
@@ -69,7 +70,7 @@ nav {
 .logo a {
   font-size: 24px;
   font-weight: bold;
-  color: var(--primary-color); /* Geändert */
+  color: var(--primary-color);
   text-decoration: none;
 }
 
@@ -79,59 +80,89 @@ nav {
 }
 
 .nav-menu li {
-  margin-left: var(--spacing-lg); /* Geändert */
+  margin-left: var(--spacing-lg);
 }
 
 .nav-menu a {
   text-decoration: none;
-  color: var(--text-color); /* Geändert */
-  transition: var(--transition); /* Neu hinzugefügt */
+  color: var(--text-color);
+  transition: var(--transition);
 }
 
 .nav-menu a.active {
   font-weight: bold;
-  color: var(--primary-color); /* Geändert */
+  color: var(--primary-color);
 }
 
 .nav-menu a:hover {
-  /* Neu hinzugefügt */
   color: var(--accent-color);
 }
 
 /* Hero Section */
 .hero {
-  background-color: var(--light-color); /* Geändert */
+  background-color: var(--light-color);
   text-align: center;
-  padding: var(--spacing-xl) 0; /* Geändert */
+  padding: var(--spacing-xl) 0;
 }
 
 .hero h1 {
   font-size: 36px;
-  font-family: var(--font-heading); /* Neu hinzugefügt */
-  margin-bottom: var(--spacing-sm); /* Geändert */
+  font-family: var(--font-heading);
+  margin-bottom: var(--spacing-sm);
 }
 
 .hero h2 {
   font-size: 24px;
   font-weight: normal;
-  margin-bottom: var(--spacing-md); /* Geändert */
+  margin-bottom: var(--spacing-md);
 }
 
 /* About Section */
 .about {
-  padding: var(--spacing-xl) 0; /* Geändert */
+  padding: var(--spacing-xl) 0;
 }
 
 .about h2 {
-  font-family: var(--font-heading); /* Neu hinzugefügt */
-  margin-bottom: var(--spacing-md); /* Geändert */
+  font-family: var(--font-heading);
+  margin-bottom: var(--spacing-md);
 }
 
 /* Footer */
 footer {
-  background-color: var(--dark-color); /* Geändert */
+  background-color: var(--dark-color);
   color: white;
   text-align: center;
-  padding: var(--spacing-md) 0; /* Geändert */
-  margin-top: var(--spacing-xl); /* Geändert */
+  padding: var(--spacing-md) 0;
+  margin-top: var(--spacing-xl);
+}
+
+/* Mobile Navigation */
+.nav-toggle {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: var(--text-color);
+  border-radius: 3px;
+  transition: var(--transition);
+}
+
+.nav-toggle.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
 }
