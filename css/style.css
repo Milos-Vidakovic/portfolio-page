@@ -33,6 +33,21 @@
   --transition: all 0.3s ease;
 }
 
+/* Dark Mode Variables */
+:root[data-theme="dark"] {
+  --primary-color: #4dabf7;
+  --secondary-color: #495057;
+  --accent-color: #ff6b6b;
+  --light-color: #1a1a1a;
+  --dark-color: #f8f9fa;
+  --text-color: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --border-color: #495057;
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-card: #2d2d2d;
+}
+
 /* Basic styles */
 * {
   margin: 0;
@@ -65,6 +80,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .logo a {
@@ -74,6 +90,14 @@ nav {
   text-decoration: none;
 }
 
+/* Navigation Controls */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* Navigation Menu */
 .nav-menu {
   display: flex;
   list-style: none;
@@ -96,6 +120,129 @@ nav {
 
 .nav-menu a:hover {
   color: var(--accent-color);
+}
+
+/* Theme Toggle Styles */
+.theme-toggle {
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  background: transparent;
+  border: 2px solid var(--border-color);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.theme-toggle:hover {
+  background-color: var(--light-color);
+  border-color: var(--primary-color);
+}
+
+.theme-icon {
+  font-size: 18px;
+  transition: var(--transition);
+}
+
+.theme-toggle.rotating .theme-icon {
+  transform: rotate(180deg);
+}
+
+/* Mobile Navigation Toggle */
+.nav-toggle {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: var(--text-color);
+  border-radius: 3px;
+  transition: var(--transition);
+}
+
+.nav-toggle.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* RESPONSIVE NAVIGATION */
+/* DESKTOP: Theme Toggle neben Logo */
+@media screen and (min-width: 769px) {
+  .theme-toggle {
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-menu {
+    display: flex;
+  }
+}
+
+/* MOBILE: Theme Toggle links vom Nav-Toggle */
+@media screen and (max-width: 768px) {
+  .nav-controls {
+    gap: var(--spacing-sm);
+  }
+
+  .theme-toggle {
+    order: 1;
+    position: static;
+    transform: none;
+  }
+
+  .nav-toggle {
+    order: 2;
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    z-index: 100;
+    box-shadow: var(--box-shadow);
+  }
+
+  .nav-menu.active {
+    max-height: 300px;
+    padding: var(--spacing-md) 0;
+  }
+
+  .nav-menu li {
+    margin: var(--spacing-xs) 0;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* Hero Section */
@@ -136,33 +283,45 @@ footer {
   margin-top: var(--spacing-xl);
 }
 
-/* Mobile Navigation */
-.nav-toggle {
-  display: none;
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
+/* DARK MODE STYLES */
+[data-theme="dark"] body {
+  background-color: var(--bg-primary);
+  color: var(--text-color);
 }
 
-.nav-toggle span {
-  display: block;
-  height: 3px;
-  width: 100%;
+[data-theme="dark"] header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .hero {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme="dark"] footer {
+  background-color: var(--bg-card);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background-color: var(--bg-card);
+}
+
+[data-theme="dark"] .nav-menu {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme="dark"] .nav-menu a {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .nav-menu a:hover {
+  color: var(--accent-color);
+}
+
+[data-theme="dark"] .nav-menu a.active {
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .nav-toggle span {
   background-color: var(--text-color);
-  border-radius: 3px;
-  transition: var(--transition);
-}
-
-.nav-toggle.active span:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
-}
-
-.nav-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-toggle.active span:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
 }
