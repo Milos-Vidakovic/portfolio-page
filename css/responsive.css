@@ -5,6 +5,10 @@
   .container {
     width: 95%;
   }
+
+  .theme-toggle {
+    left: 90px; /* Desktop Fine-Tuning */
+  }
 }
 
 /* Mittlere Bildschirme (Tablets) */
@@ -22,8 +26,22 @@
   }
 }
 
+/* Tablet Fine-Tuning */
+@media screen and (min-width: 769px) and (max-width: 992px) {
+  .theme-toggle {
+    left: 75px;
+  }
+}
+
 /* Kleine Bildschirme (Smartphones) */
 @media screen and (max-width: 768px) {
+  body {
+    padding-top: 70px;
+  }
+
+  [data-theme="dark"] body {
+    padding-top: 70px;
+  }
   .nav-toggle {
     display: flex;
   }
@@ -65,6 +83,37 @@
   .hero h2 {
     font-size: 1.25rem;
   }
+
+  /* Dark Mode & Theme Toggle Mobile */
+  .nav-controls {
+    gap: var(--spacing-sm);
+  }
+
+  .theme-toggle {
+    width: 35px;
+    height: 35px;
+  }
+
+  .theme-icon {
+    font-size: 16px;
+  }
+
+  [data-theme="dark"] .nav-menu {
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* About Section Mobile */
+  .about h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .about-intro {
+    font-size: 1rem;
+    text-align: center;
+    padding: 0 var(--spacing-md);
+  }
 }
 
 /* Sehr kleine Bildschirme */
@@ -76,84 +125,14 @@
   .container {
     width: 95%;
   }
-}
 
-/* Dark Mode Responsive Adjustments */
-@media screen and (max-width: 768px) {
-  .nav-controls {
-    gap: var(--spacing-sm);
-  }
-
-  .theme-toggle {
-    width: 35px;
-    height: 35px;
-  }
-
-  .theme-icon {
-    font-size: 16px;
-  }
-
-  /* Dark Mode Mobile Menu */
-  [data-theme="dark"] .nav-menu {
-    background-color: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-  }
-}
-
-@media screen and (max-width: 480px) {
   .theme-toggle {
     width: 32px;
     height: 32px;
+    position: static;
   }
 
   .theme-icon {
     font-size: 14px;
-  }
-}
-
-/* Dark Mode Responsive Adjustments */
-@media screen and (max-width: 768px) {
-  .nav-controls {
-    gap: var(--spacing-sm);
-  }
-
-  .theme-toggle {
-    width: 35px;
-    height: 35px;
-  }
-
-  .theme-icon {
-    font-size: 16px;
-  }
-
-  /* Dark Mode Mobile Menu */
-  [data-theme="dark"] .nav-menu {
-    background-color: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .theme-toggle {
-    width: 32px;
-    height: 32px;
-    position: static; /* Überschreibt absolute positioning auf sehr kleinen Screens */
-  }
-
-  .theme-icon {
-    font-size: 14px;
-  }
-}
-
-/* Desktop Fine-Tuning */
-@media screen and (min-width: 1200px) {
-  .theme-toggle {
-    left: 90px; /* Etwas mehr Abstand auf großen Bildschirmen */
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 992px) {
-  .theme-toggle {
-    left: 75px; /* Weniger Abstand auf Tablets */
   }
 }

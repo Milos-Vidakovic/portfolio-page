@@ -59,6 +59,7 @@ body {
   font-family: var(--font-primary);
   line-height: 1.6;
   color: var(--text-color);
+  padding-top: 80px;
 }
 
 .container {
@@ -68,12 +69,16 @@ body {
   padding: 0 var(--spacing-md);
 }
 
-/* Header & Navigation */
+/* Header & Navigation - Header bleibt beim Scrollen sichtbar */
 header {
   background: white;
   padding: var(--spacing-md) 0;
   box-shadow: var(--box-shadow);
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 nav {
@@ -220,7 +225,7 @@ nav {
 
   .nav-menu {
     position: fixed;
-    top: 70px;
+    top: 80px;
     left: 0;
     width: 100%;
     background-color: white;
@@ -271,7 +276,28 @@ nav {
 
 .about h2 {
   font-family: var(--font-heading);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  text-align: center; /* ← Hinzugefügt für Zentrierung */
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+}
+
+/* About Content Styling */
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about-intro {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: var(--spacing-xl);
+  text-align: center; /* ← Bereits zentriert, aber sichergestellt */
+  color: var(--text-secondary);
+  max-width: 700px; /* ← Begrenzt die Textbreite für bessere Lesbarkeit */
+  margin-left: auto; /* ← Zentriert den Text-Container */
+  margin-right: auto; /* ← Zentriert den Text-Container */
+  margin-bottom: var(--spacing-xl);
 }
 
 /* Footer */
@@ -287,11 +313,13 @@ footer {
 [data-theme="dark"] body {
   background-color: var(--bg-primary);
   color: var(--text-color);
+  padding-top: 80px;
 }
 
 [data-theme="dark"] header {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
+  position: fixed;
 }
 
 [data-theme="dark"] .hero {
@@ -324,4 +352,305 @@ footer {
 
 [data-theme="dark"] .nav-toggle span {
   background-color: var(--text-color);
+}
+
+/* ======================
+   ABOUT ME SEITE STYLES
+   ====================== */
+
+/* Portrait Bild im Hero Bereich */
+.portrait {
+  margin: var(--spacing-lg) 0;
+  display: flex;
+  justify-content: center;
+}
+
+.portrait-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary-color);
+  box-shadow: var(--box-shadow-lg);
+  transition: var(--transition);
+}
+
+.portrait-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+/* About Content Styling */
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about-intro {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Interests Section */
+.interests-section {
+  margin-top: var(--spacing-xl);
+}
+
+.interests-section h3 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--primary-color);
+}
+
+.interests-intro {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Section Titles für Untergruppen */
+.section-title {
+  margin: var(--spacing-xl) 0 var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.section-title h4 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+  position: relative;
+  display: inline-block;
+  padding-bottom: var(--spacing-sm);
+}
+
+.section-title h4::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+  border-radius: 2px;
+}
+
+/* Photo Gallery */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.gallery-item {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.gallery-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.gallery-item:hover .gallery-img {
+  transform: scale(1.1);
+}
+
+.gallery-caption {
+  padding: var(--spacing-md);
+  position: relative;
+}
+
+.gallery-caption h4 {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-color);
+}
+
+.gallery-caption p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Spezielle Styles für Reise-Galerie */
+.travel-gallery .gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.travel-gallery .gallery-item::before {
+  content: "✈️";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.2rem;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* Spezielle Styles für Interessen-Galerie */
+.interests-gallery .gallery-item::before {
+  content: "⭐";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.2rem;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* ======================
+   RESPONSIVE ANPASSUNGEN
+   ====================== */
+
+/* Große Bildschirme */
+@media screen and (min-width: 1200px) {
+  .photo-gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet Anpassungen */
+@media screen and (max-width: 992px) {
+  .portrait-img {
+    width: 180px;
+    height: 180px;
+  }
+
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .gallery-img {
+    height: 200px;
+  }
+
+  .interests-section h3 {
+    font-size: 1.8rem;
+  }
+
+  .section-title h4 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Mobile Anpassungen */
+@media screen and (max-width: 768px) {
+  .portrait-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-intro {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .interests-section h3 {
+    font-size: 1.6rem;
+  }
+
+  .section-title h4 {
+    font-size: 1.2rem;
+  }
+
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .gallery-img {
+    height: 180px;
+  }
+}
+
+/* Sehr kleine Bildschirme */
+@media screen and (max-width: 480px) {
+  .portrait-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero h2 {
+    font-size: 1.25rem;
+  }
+
+  .photo-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-img {
+    height: 160px;
+  }
+
+  .gallery-caption {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* ======================
+   DARK MODE ANPASSUNGEN
+   ====================== */
+
+[data-theme="dark"] .portrait-img {
+  border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .gallery-item {
+  background-color: var(--bg-card);
+}
+
+[data-theme="dark"] .gallery-caption h4 {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .gallery-caption p {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .about-intro,
+[data-theme="dark"] .interests-intro {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .interests-section h3 {
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .section-title h4 {
+  color: var(--text-color);
 }
