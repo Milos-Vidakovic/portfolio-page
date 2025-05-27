@@ -654,3 +654,379 @@ footer {
 [data-theme="dark"] .section-title h4 {
   color: var(--text-color);
 }
+
+/* ======================
+   EDUCATION SEITE STYLES
+   ====================== */
+
+/* Education Section */
+.education {
+  padding: var(--spacing-xl) 0;
+}
+
+.education h2 {
+  font-family: var(--font-heading);
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+}
+
+/* Timeline Container */
+.timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) 0;
+}
+
+/* Timeline Linie */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  border-radius: 2px;
+}
+
+/* Timeline Item */
+.timeline-item {
+  position: relative;
+  margin-bottom: var(--spacing-xl);
+  padding-left: 80px;
+}
+
+/* Timeline Marker */
+.timeline-marker {
+  position: absolute;
+  left: 18px;
+  top: 0;
+}
+
+.timeline-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  border: 4px solid white;
+  box-shadow: 0 0 0 4px var(--primary-color);
+  transition: var(--transition);
+}
+
+/* Aktueller Punkt hervorheben */
+.timeline-item.current .timeline-dot {
+  background: var(--accent-color);
+  box-shadow: 0 0 0 4px var(--accent-color);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 4px var(--accent-color);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(231, 76, 60, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 4px var(--accent-color);
+  }
+}
+
+/* Timeline Content */
+.timeline-content {
+  background: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  position: relative;
+}
+
+.timeline-content::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid white;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+/* Timeline Header */
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.timeline-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.timeline-date {
+  background: var(--primary-color);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Institution & Study Type */
+.timeline-content h4 {
+  font-size: 1.3rem;
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.institution {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  font-style: italic;
+}
+
+.study-type {
+  display: inline-block;
+  background: var(--light-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Curriculum Section */
+.curriculum {
+  margin-top: var(--spacing-md);
+}
+
+.curriculum h5 {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Subjects Grid */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.subject {
+  background: var(--light-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  text-align: center;
+  border-left: 3px solid var(--primary-color);
+  transition: var(--transition);
+}
+
+.subject:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Achievements - wie Subject Grid Style */
+.achievements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.achievement {
+  background: var(--light-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--primary-color);
+  transition: var(--transition);
+  text-align: center;
+}
+
+.achievement:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateX(5px);
+}
+
+.achievement h5 {
+  color: var(--text-color);
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.achievement:hover h5 {
+  color: white;
+}
+
+.achievement p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+  font-style: normal;
+}
+
+.achievement:hover p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ======================
+   RESPONSIVE ANPASSUNGEN
+   ====================== */
+
+/* Tablet */
+@media screen and (max-width: 768px) {
+  .timeline::before {
+    left: 20px;
+  }
+
+  .timeline-item {
+    padding-left: 60px;
+  }
+
+  .timeline-marker {
+    left: 8px;
+  }
+
+  .timeline-dot {
+    width: 16px;
+    height: 16px;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .timeline-date {
+    margin-top: var(--spacing-xs);
+  }
+
+  .subjects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .achievements {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .timeline {
+    padding: var(--spacing-md) 0;
+  }
+
+  .timeline-content {
+    padding: var(--spacing-md);
+  }
+
+  .timeline-content::before {
+    display: none;
+  }
+
+  .timeline-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .education h2 {
+    font-size: 2rem;
+  }
+}
+
+/* ======================
+   DARK MODE ANPASSUNGEN
+   ====================== */
+
+[data-theme="dark"] .timeline-content {
+  background-color: var(--bg-card);
+}
+
+[data-theme="dark"] .timeline-content::before {
+  border-right-color: var(--bg-card);
+}
+
+[data-theme="dark"] .timeline-header h3 {
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .timeline-content h4 {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .institution {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .study-type {
+  background: var(--bg-secondary);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .subject {
+  background: var(--bg-secondary);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .achievement {
+  background: var(--bg-secondary);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .achievement h5 {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .achievement p {
+  color: var(--text-secondary);
+  font-style: normal;
+}
+
+[data-theme="dark"] .achievement:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+[data-theme="dark"] .achievement:hover h5,
+[data-theme="dark"] .achievement:hover p {
+  color: white;
+}
+
+[data-theme="dark"] .curriculum h5 {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .education h2 {
+  color: var(--text-color);
+}
