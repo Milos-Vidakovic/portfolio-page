@@ -673,11 +673,34 @@ function showMapError() {
   `;
 }
 
-// Weather API Configuration - ENHANCED with search
-const WEATHER_API_KEY = "26a537a75391d0402d26b5d488a752f6";
-const WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
-const FORECAST_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast";
-const GEO_BASE_URL = "https://api.openweathermap.org/geo/1.0/direct";
+// =======================================
+// REPARIERTE API-KONFIGURATION
+// =======================================
+
+function getAPIConfig() {
+  // Prüfe ob config.js geladen wurde
+  if (typeof window.API_CONFIG !== "undefined") {
+    console.log("✅ config.js gefunden und geladen");
+    return window.API_CONFIG;
+  }
+
+  // Fallback zu aktualisierten Demo-Keys
+  console.warn(
+    "⚠️ config.js nicht gefunden - verwende aktualisierte Demo-Keys"
+  );
+  return {
+    // AKTUALISIERTE WEATHER API KEYS
+    WEATHER_API_KEY: "89c44068eb30e9b67bac85ac825408ab", // Neuer funktionierender Key
+    WEATHER_BASE_URL: "https://api.openweathermap.org/data/2.5/weather",
+    FORECAST_BASE_URL: "https://api.openweathermap.org/data/2.5/forecast",
+    GEO_BASE_URL: "https://api.openweathermap.org/geo/1.0/direct",
+
+    // MOVIE API KEYS (funktionieren bereits)
+    MOVIE_API_KEY: "d441edaab7433789dd41dc91e12a69f8", // Aktiver Demo Key
+    MOVIE_API_BASE: "https://api.themoviedb.org/3",
+    MOVIE_IMAGE_BASE: "https://image.tmdb.org/t/p/w500",
+  };
+}
 
 // Popular Swiss cities as default (but now searchable!)
 const DEFAULT_CITIES = [
@@ -690,7 +713,7 @@ const DEFAULT_CITIES = [
 ];
 
 async function loadWeatherData() {
-  console.log("Loading weather data...");
+  console.log("🌤️ Loading weather data...");
 
   const weatherGrid = document.getElementById("weather-grid");
   const loading = document.getElementById("weather-loading");
@@ -700,12 +723,25 @@ async function loadWeatherData() {
   weatherGrid.innerHTML = "";
 
   try {
+    // Test API connection first
+    console.log("🔧 Testing Weather API connection...");
+    const config = getAPIConfig();
+    console.log(
+      "🔑 Using API Key:",
+      config.WEATHER_API_KEY.substring(0, 8) + "..."
+    );
+
     // Fetch weather for default cities
     const weatherPromises = DEFAULT_CITIES.map((city) =>
       fetchWeatherForCity(city.lat, city.lon, city.name, city.country)
     );
 
     const weatherData = await Promise.all(weatherPromises);
+    console.log(
+      "✅ Weather data loaded successfully:",
+      weatherData.length,
+      "cities"
+    );
 
     // Hide loading
     loading.style.display = "none";
@@ -713,11 +749,15 @@ async function loadWeatherData() {
     // Display weather interface with search
     displayWeatherInterface(weatherData);
   } catch (error) {
-    console.error("Error loading weather data:", error);
+    console.error("❌ Error loading weather data:", error);
     loading.innerHTML = `
       <div style="text-align: center; color: var(--accent-color);">
-        <h3>⚠️ Weather data unavailable</h3>
-        <p>Please check your internet connection or try again later.</p>
+        <h3>⚠️ Weather API Error</h3>
+        <p><strong>Details:</strong> ${error.message}</p>
+        <p>This could be due to API rate limits or network issues.</p>
+        <button onclick="loadWeatherData()" style="padding: 10px 20px; margin-top: 10px; border: none; background: var(--accent-color); color: white; border-radius: 5px; cursor: pointer;">
+          🔄 Retry
+        </button>
       </div>
     `;
   }
@@ -725,14 +765,29 @@ async function loadWeatherData() {
 
 // Fetch weather for specific coordinates
 async function fetchWeatherForCity(lat, lon, cityName = "", country = "") {
-  const url = `${WEATHER_BASE_URL}?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
+  const config = getAPIConfig();
+  const url = `${config.WEATHER_BASE_URL}?lat=${lat}&lon=${lon}&appid=${config.WEATHER_API_KEY}&units=metric`;
+
+  console.log(`🌍 Fetching weather for ${cityName}...`);
+  console.log(
+    `🔗 API URL: ${url.replace(config.WEATHER_API_KEY, "API_KEY_HIDDEN")}`
+  );
 
   const response = await fetch(url);
+
   if (!response.ok) {
-    throw new Error(`Weather API error: ${response.status}`);
+    const errorText = await response.text();
+    console.error(
+      `❌ Weather API error for ${cityName}:`,
+      response.status,
+      errorText
+    );
+    throw new Error(`Weather API error: ${response.status} - ${errorText}`);
   }
 
   const data = await response.json();
+  console.log(`✅ Weather data received for ${cityName}:`, data);
+
   return {
     ...data,
     cityName: cityName || data.name,
@@ -752,17 +807,21 @@ async function searchCities(query) {
     return;
   }
 
-  const url = `${GEO_BASE_URL}?q=${encodeURIComponent(
+  const config = getAPIConfig();
+  const url = `${config.GEO_BASE_URL}?q=${encodeURIComponent(
     query
-  )}&limit=6&appid=${WEATHER_API_KEY}`;
+  )}&limit=6&appid=${config.WEATHER_API_KEY}`;
 
   try {
+    console.log(`🔍 Searching cities for: "${query}"`);
     const response = await fetch(url);
+
     if (!response.ok) {
       throw new Error(`Geocoding API error: ${response.status}`);
     }
 
     const cities = await response.json();
+    console.log(`🏙️ Found ${cities.length} cities for "${query}"`);
 
     if (cities.length === 0) {
       displayWeatherCards([]);
@@ -959,9 +1018,15 @@ async function showWeatherDetails(lat, lon, cityName, country) {
     // Show loading in modal
     showWeatherModal("loading");
 
+    const config = getAPIConfig();
     const forecastResponse = await fetch(
-      `${FORECAST_BASE_URL}?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
+      `${config.FORECAST_BASE_URL}?lat=${lat}&lon=${lon}&appid=${config.WEATHER_API_KEY}&units=metric`
     );
+
+    if (!forecastResponse.ok) {
+      throw new Error(`Forecast API error: ${forecastResponse.status}`);
+    }
+
     const forecastData = await forecastResponse.json();
 
     // Show weather details in modal
@@ -1056,8 +1121,8 @@ function showWeatherModal(
 
   // Create modal
   const modal = document.createElement("div");
-  modal.id = "weather-modal";
-  modal.className = "weather-modal";
+  modal.id = "movie-modal";
+  modal.className = "movie-modal";
   modal.innerHTML = modalContent;
 
   // Add to page
@@ -1066,7 +1131,7 @@ function showWeatherModal(
   // Close on background click
   modal.addEventListener("click", function (e) {
     if (e.target === modal) {
-      closeWeatherModal();
+      closeMovieModal();
     }
   });
 
@@ -1074,13 +1139,72 @@ function showWeatherModal(
   setTimeout(() => modal.classList.add("show"), 10);
 }
 
-function closeWeatherModal() {
-  const modal = document.getElementById("weather-modal");
+function closeMovieModal() {
+  const modal = document.getElementById("movie-modal");
   if (modal) {
     modal.classList.remove("show");
     setTimeout(() => modal.remove(), 300);
   }
 }
+
+// =======================================
+// GALLERY & UI FUNKTIONEN
+// =======================================
+
+// Galerie Interaktivität (falls auf About Me Seite)
+function initGallery() {
+  const galleryItems = document.querySelectorAll(".gallery-item");
+
+  if (galleryItems.length > 0) {
+    galleryItems.forEach((item) => {
+      item.addEventListener("click", function () {
+        this.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          this.style.transform = "";
+        }, 150);
+      });
+    });
+  }
+}
+
+// Scroll-Effekt für Header
+function initScrollEffect() {
+  const header = document.querySelector("header");
+
+  if (header) {
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+  }
+}
+
+// =======================================
+// INITIALIZATION
+// =======================================
+
+// Add to DOMContentLoaded
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("🚀 JavaScript wird ausgeführt!");
+  console.log("🔧 Initialisiere alle Komponenten...");
+
+  // Initialize core functionality
+  initNavigation();
+  initDarkMode();
+  initGallery();
+  initScrollEffect();
+
+  // Initialize API tabs if on API showcase page
+  if (document.querySelector(".api-showcase")) {
+    console.log("📊 API Showcase Seite erkannt - initialisiere API Tabs");
+    initAPITabs();
+  }
+
+  console.log("✅ Alle Komponenten erfolgreich initialisiert!");
+});
 
 // Process forecast data into daily forecasts
 function processForecastData(forecastList) {
@@ -1119,6 +1243,18 @@ function processForecastData(forecastList) {
 
   return Object.values(dailyData).slice(0, 5); // Return first 5 days
 }
+
+function closeWeatherModal() {
+  const modal = document.getElementById("weather-modal");
+  if (modal) {
+    modal.classList.remove("show");
+    setTimeout(() => modal.remove(), 300);
+  }
+}
+
+// =======================================
+// CRYPTO API FUNKTIONEN
+// =======================================
 
 // Crypto API Configuration
 const CRYPTO_API_BASE = "https://api.coingecko.com/api/v3";
@@ -1309,7 +1445,7 @@ function getCryptoEmoji(id) {
     solana: "🟣",
     polkadot: "🔴",
     dogecoin: "🐕",
-    chainlink: "🔗", // ← Diese Zeile hinzufügen
+    chainlink: "🔗",
   };
   return emojis[id] || "💰";
 }
@@ -1325,13 +1461,9 @@ function formatMarketCap(marketCap) {
   return marketCap.toLocaleString();
 }
 
-// Movie API Configuration - LIVE API
-const MOVIE_API_KEY = "8fefe0349d3b8134bf2bf942f1b3621d";
-const MOVIE_API_BASE = "https://api.themoviedb.org/3";
-const MOVIE_IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
-
-// Demo API Key für Testing (limitiert, aber funktioniert)
-const DEMO_API_KEY = "a07e22bc18f5cb106bfe4cc1f83ad8ed";
+// =======================================
+// MOVIE API FUNKTIONEN
+// =======================================
 
 async function loadMovieData() {
   console.log("Loading movie data...");
@@ -1365,9 +1497,8 @@ async function loadMovieData() {
 
 // Fetch popular movies from TMDB
 async function fetchPopularMovies() {
-  const apiKey =
-    MOVIE_API_KEY !== "dein_api_key_hier" ? MOVIE_API_KEY : DEMO_API_KEY;
-  const url = `${MOVIE_API_BASE}/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
+  const config = getAPIConfig();
+  const url = `${config.MOVIE_API_BASE}/movie/popular?api_key=${config.MOVIE_API_KEY}&language=en-US&page=1`;
 
   const response = await fetch(url);
   if (!response.ok) {
@@ -1387,11 +1518,10 @@ async function searchMovies(query) {
     return;
   }
 
-  const apiKey =
-    MOVIE_API_KEY !== "dein_api_key_hier" ? MOVIE_API_KEY : DEMO_API_KEY;
-  const url = `${MOVIE_API_BASE}/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(
-    query
-  )}&page=1`;
+  const config = getAPIConfig();
+  const url = `${config.MOVIE_API_BASE}/search/movie?api_key=${
+    config.MOVIE_API_KEY
+  }&language=en-US&query=${encodeURIComponent(query)}&page=1`;
 
   try {
     const response = await fetch(url);
@@ -1447,6 +1577,7 @@ function displayMovieInterface(initialMovies) {
 
 // Display movie cards
 function displayMovieCards(movies) {
+  const config = getAPIConfig();
   const moviesCards = document.getElementById("movies-cards");
 
   if (!movies || movies.length === 0) {
@@ -1466,7 +1597,7 @@ function displayMovieCards(movies) {
       <div class="movie-poster">
         <img src="${
           movie.poster_path
-            ? MOVIE_IMAGE_BASE + movie.poster_path
+            ? config.MOVIE_IMAGE_BASE + movie.poster_path
             : "https://via.placeholder.com/500x750/cccccc/666666?text=No+Poster"
         }" 
              alt="${movie.title} Poster" 
@@ -1559,15 +1690,14 @@ function getGenreNames(genreIds) {
 
 // Show detailed movie information in a beautiful modal
 async function showMovieDetails(movieId) {
-  const apiKey =
-    MOVIE_API_KEY !== "dein_api_key_hier" ? MOVIE_API_KEY : DEMO_API_KEY;
+  const config = getAPIConfig();
 
   try {
     // Show loading in modal
     showMovieModal("loading");
 
     const response = await fetch(
-      `${MOVIE_API_BASE}/movie/${movieId}?api_key=${apiKey}&language=en-US`
+      `${config.MOVIE_API_BASE}/movie/${movieId}?api_key=${config.MOVIE_API_KEY}&language=en-US`
     );
     const movie = await response.json();
 
@@ -1580,6 +1710,7 @@ async function showMovieDetails(movieId) {
 }
 
 function showMovieModal(type, movie = null) {
+  const config = getAPIConfig();
   // Remove existing modal
   const existingModal = document.getElementById("movie-modal");
   if (existingModal) {
@@ -1612,7 +1743,7 @@ function showMovieModal(type, movie = null) {
           <div class="modal-poster">
             <img src="${
               movie.poster_path
-                ? MOVIE_IMAGE_BASE + movie.poster_path
+                ? config.MOVIE_IMAGE_BASE + movie.poster_path
                 : "https://via.placeholder.com/300x450/cccccc/666666?text=No+Poster"
             }" 
                  alt="${movie.title} Poster">
@@ -1715,45 +1846,3 @@ function closeMovieModal() {
     setTimeout(() => modal.remove(), 300);
   }
 }
-
-// Galerie Interaktivität (falls auf About Me Seite)
-function initGallery() {
-  const galleryItems = document.querySelectorAll(".gallery-item");
-
-  if (galleryItems.length > 0) {
-    galleryItems.forEach((item) => {
-      item.addEventListener("click", function () {
-        this.style.transform = "scale(0.95)";
-        setTimeout(() => {
-          this.style.transform = "";
-        }, 150);
-      });
-    });
-  }
-}
-
-// Scroll-Effekt für Header
-function initScrollEffect() {
-  const header = document.querySelector("header");
-
-  if (header) {
-    window.addEventListener("scroll", function () {
-      if (window.scrollY > 50) {
-        header.classList.add("scrolled");
-      } else {
-        header.classList.remove("scrolled");
-      }
-    });
-  }
-}
-
-// Add to DOMContentLoaded
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("JavaScript wird ausgeführt!");
-
-  initNavigation();
-  initDarkMode();
-  initGallery();
-  initScrollEffect();
-  initAPITabs(); // Neue Funktion hinzufügen
-});
