@@ -15,6 +15,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
     <link rel="stylesheet" href="../css/responsive.css" />
   </head>
   <body>
@@ -39,7 +41,6 @@
           <ul class="nav-menu" id="navMenu">
             <li><a href="../index.html">About Me</a></li>
             <li><a href="education.html">Education</a></li>
-            <li><a href="experience.html">Experience</a></li>
             <li><a href="api-showcase.html">API Showcase</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
@@ -51,14 +52,104 @@
       <section class="hero">
         <div class="container">
           <h1>API Showcase</h1>
-          <p>Demonstrating my skills with APIs</p>
+          <p>Demonstrating my skills with APIs and dynamic content</p>
         </div>
       </section>
 
       <section class="api-showcase">
         <div class="container">
-          <h2>API Integration Projects</h2>
-          <!-- API showcase content will be added here -->
+          <!-- Tab Navigation -->
+          <div class="api-tabs">
+            <button class="tab-btn active" data-tab="world" id="world-tab">
+              <span class="tab-icon">🌍</span>
+              <span class="tab-text">World Map</span>
+            </button>
+            <button class="tab-btn" data-tab="weather" id="weather-tab">
+              <span class="tab-icon">🌤️</span>
+              <span class="tab-text">Weather</span>
+            </button>
+            <button class="tab-btn" data-tab="crypto" id="crypto-tab">
+              <span class="tab-icon">💰</span>
+              <span class="tab-text">Crypto</span>
+            </button>
+            <button class="tab-btn" data-tab="movies" id="movies-tab">
+              <span class="tab-icon">🎬</span>
+              <span class="tab-text">Movies</span>
+            </button>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="api-content">
+            <!-- World Map Panel -->
+            <div class="tab-panel active" id="world-panel">
+              <div class="api-header">
+                <h2>🌍 Interactive World Map</h2>
+                <p>Explore the world with our modern, flat design map</p>
+              </div>
+              <div class="api-container">
+                <div class="loading" id="world-loading">
+                  <div class="spinner"></div>
+                  <p>Loading your location...</p>
+                </div>
+                <div class="world-map-container">
+                  <div id="world-map"></div>
+                  <div id="location-info">
+                    <!-- Modern location cards will be inserted here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weather Panel -->
+            <div class="tab-panel" id="weather-panel">
+              <div class="api-header">
+                <h2>Swiss Weather Dashboard</h2>
+                <p>Current weather conditions for Swiss cities</p>
+              </div>
+              <div class="api-container">
+                <div class="loading" id="weather-loading">
+                  <div class="spinner"></div>
+                  <p>Loading weather data...</p>
+                </div>
+                <div class="weather-grid" id="weather-grid">
+                  <!-- Weather cards will be inserted here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Crypto Panel -->
+            <div class="tab-panel" id="crypto-panel">
+              <div class="api-header">
+                <h2>Crypto & Currency Tracker</h2>
+                <p>Live cryptocurrency prices and CHF exchange rates</p>
+              </div>
+              <div class="api-container">
+                <div class="loading" id="crypto-loading">
+                  <div class="spinner"></div>
+                  <p>Loading market data...</p>
+                </div>
+                <div class="crypto-grid" id="crypto-grid">
+                  <!-- Crypto data will be inserted here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" id="movies-panel">
+              <div class="api-header">
+                <h2>Movie Search Engine</h2>
+                <p>Discover popular movies with ratings and details</p>
+              </div>
+              <div class="api-container">
+                <div class="loading" id="movies-loading">
+                  <div class="spinner"></div>
+                  <p>Loading movie database...</p>
+                </div>
+                <div class="movies-grid" id="movies-grid">
+                  <!-- Movie cards will be inserted here -->
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
