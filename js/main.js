@@ -790,7 +790,8 @@ async function fetchWeatherForCity(lat, lon, cityName = "", country = "") {
   };
 }
 
-// Search cities by name
+// Ersetze deine searchCities Funktion mit dieser Version:
+
 async function searchCities(query) {
   if (!query || query.length < 2) {
     // If search is empty, load default cities
@@ -805,7 +806,7 @@ async function searchCities(query) {
   const config = getAPIConfig();
   const url = `${config.GEO_BASE_URL}?q=${encodeURIComponent(
     query
-  )}&limit=6&appid=${config.WEATHER_API_KEY}`;
+  )}&limit=12&appid=${config.WEATHER_API_KEY}`; // Mehr Cities holen
 
   try {
     console.log(`🔍 Searching cities for: "${query}"`);
@@ -823,8 +824,27 @@ async function searchCities(query) {
       return;
     }
 
-    // Fetch weather for found cities
-    const weatherPromises = cities.map((city) =>
+    // ✅ FIX: Entferne Duplikate basierend auf Stadt + Land
+    const uniqueCities = [];
+    const seenCities = new Set();
+
+    cities.forEach((city) => {
+      const cityKey = `${city.name}-${city.country}`;
+      if (!seenCities.has(cityKey)) {
+        seenCities.add(cityKey);
+        uniqueCities.push(city);
+      }
+    });
+
+    console.log(
+      `🎯 Nach Duplikat-Entfernung: ${uniqueCities.length} einzigartige Städte`
+    );
+
+    // Nur die ersten 6 einzigartigen Städte nehmen
+    const citiesToShow = uniqueCities.slice(0, 6);
+
+    // Fetch weather for unique cities
+    const weatherPromises = citiesToShow.map((city) =>
       fetchWeatherForCity(city.lat, city.lon, city.name, city.country)
     );
 
@@ -834,7 +854,7 @@ async function searchCities(query) {
     // Update search info
     const searchInfo = document.getElementById("weather-search-info");
     if (searchInfo) {
-      searchInfo.textContent = `Found weather for ${cities.length} cities matching "${query}"`;
+      searchInfo.textContent = `Found weather for ${citiesToShow.length} cities matching "${query}"`;
     }
   } catch (error) {
     console.error("Error searching cities:", error);
@@ -1038,11 +1058,16 @@ function showWeatherModal(
   cityName = "",
   country = ""
 ) {
+  const modalId = "weather-modal";
+
   // Remove existing modal
-  const existingModal = document.getElementById("weather-modal");
+  const existingModal = document.getElementById(modalId);
   if (existingModal) {
     existingModal.remove();
   }
+
+  // Verhindere Scrollen im Hintergrund
+  document.body.classList.add("modal-open");
 
   let modalContent = "";
 
@@ -1062,12 +1087,11 @@ function showWeatherModal(
       </div>
     `;
   } else if (type === "details" && forecastData) {
-    // Process forecast data - group by days
     const dailyForecasts = processForecastData(forecastData.list);
 
     modalContent = `
-      <div class="modal-content details weather-modal-content">
-        <button class="modal-close-x" onclick="closeWeatherModal()">×</button>
+      <div class="modal-content details weather-modal-content" tabindex="-1">
+        <button class="modal-close-x" onclick="closeWeatherModal()" aria-label="Close modal">×</button>
         
         <div class="weather-modal-header">
           <h2>🌤️ ${cityName}, ${getCountryName(country)}</h2>
@@ -1114,32 +1138,39 @@ function showWeatherModal(
     `;
   }
 
-  // Create modal
   const modal = document.createElement("div");
-  modal.id = "movie-modal";
-  modal.className = "movie-modal";
+  modal.id = modalId;
+  modal.className = "weather-modal";
   modal.innerHTML = modalContent;
 
-  // Add to page
   document.body.appendChild(modal);
 
-  // Close on background click
+  // Event Listeners
   modal.addEventListener("click", function (e) {
     if (e.target === modal) {
-      closeMovieModal();
+      closeWeatherModal();
     }
   });
 
-  // Show modal with animation
-  setTimeout(() => modal.classList.add("show"), 10);
-}
+  // Escape key
+  const handleEscapeKey = (e) => {
+    if (e.key === "Escape") {
+      closeWeatherModal();
+    }
+  };
+  document.addEventListener("keydown", handleEscapeKey);
 
-function closeMovieModal() {
-  const modal = document.getElementById("movie-modal");
-  if (modal) {
-    modal.classList.remove("show");
-    setTimeout(() => modal.remove(), 300);
-  }
+  // Store reference for cleanup
+  modal._escapeHandler = handleEscapeKey;
+
+  // Show modal
+  setTimeout(() => {
+    modal.classList.add("show");
+    const modalContent = modal.querySelector(".modal-content");
+    if (modalContent) {
+      modalContent.focus();
+    }
+  }, 10);
 }
 
 // =======================================
@@ -1176,30 +1207,6 @@ function initScrollEffect() {
     });
   }
 }
-
-// =======================================
-// INITIALIZATION
-// =======================================
-
-// Add to DOMContentLoaded
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("🚀 JavaScript wird ausgeführt!");
-  console.log("🔧 Initialisiere alle Komponenten...");
-
-  // Initialize core functionality
-  initNavigation();
-  initDarkMode();
-  initGallery();
-  initScrollEffect();
-
-  // Initialize API tabs if on API showcase page
-  if (document.querySelector(".api-showcase")) {
-    console.log("📊 API Showcase Seite erkannt - initialisiere API Tabs");
-    initAPITabs();
-  }
-
-  console.log("✅ Alle Komponenten erfolgreich initialisiert!");
-});
 
 // Process forecast data into daily forecasts
 function processForecastData(forecastList) {
@@ -1240,10 +1247,29 @@ function processForecastData(forecastList) {
 }
 
 function closeWeatherModal() {
+  console.log("Closing weather modal...");
+
   const modal = document.getElementById("weather-modal");
+
   if (modal) {
+    // Body Scroll wieder aktivieren
+    document.body.classList.remove("modal-open");
+
+    // Cleanup event listener
+    if (modal._escapeHandler) {
+      document.removeEventListener("keydown", modal._escapeHandler);
+    }
+
     modal.classList.remove("show");
-    setTimeout(() => modal.remove(), 300);
+
+    setTimeout(() => {
+      if (modal.parentNode) {
+        modal.parentNode.removeChild(modal);
+      }
+    }, 300);
+  } else {
+    // Fallback: Entferne modal-open Klasse auch wenn Modal nicht gefunden
+    document.body.classList.remove("modal-open");
   }
 }
 
@@ -1836,9 +1862,13 @@ function showMovieModal(type, movie = null) {
 
 function closeMovieModal() {
   const modal = document.getElementById("movie-modal");
+
   if (modal) {
+    document.body.classList.remove("modal-open");
     modal.classList.remove("show");
     setTimeout(() => modal.remove(), 300);
+  } else {
+    document.body.classList.remove("modal-open");
   }
 }
 
@@ -2040,3 +2070,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("✅ Alle Komponenten erfolgreich initialisiert!");
 });
+
+// UNIVERSAL MODAL CLEANUP - Am Ende der main.js hinzufügen
+function cleanupAllModals() {
+  const allModals = document.querySelectorAll(
+    '.weather-modal, .movie-modal, [id*="modal"]'
+  );
+  allModals.forEach((modal) => {
+    if (modal.parentNode) {
+      modal.parentNode.removeChild(modal);
+    }
+  });
+
+  document.body.classList.remove("modal-open");
+  console.log("✅ All modals cleaned up");
+}
+
+// Cleanup beim Seitenwechsel
+window.addEventListener("beforeunload", cleanupAllModals);
