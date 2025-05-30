@@ -678,25 +678,20 @@ function showMapError() {
 // =======================================
 
 function getAPIConfig() {
-  // Prüfe ob config.js geladen wurde
   if (typeof window.API_CONFIG !== "undefined") {
     console.log("✅ config.js gefunden und geladen");
     return window.API_CONFIG;
   }
 
-  // Fallback zu aktualisierten Demo-Keys
-  console.warn(
-    "⚠️ config.js nicht gefunden - verwende aktualisierte Demo-Keys"
-  );
+  // SICHERE Demo-Keys
+  console.warn("⚠️ config.js nicht gefunden - API-Features deaktiviert");
   return {
-    // AKTUALISIERTE WEATHER API KEYS
-    WEATHER_API_KEY: "89c44068eb30e9b67bac85ac825408ab", // Neuer funktionierender Key
+    WEATHER_API_KEY: "DEMO_KEY_PLEASE_ADD_REAL_KEY_IN_CONFIG_JS",
     WEATHER_BASE_URL: "https://api.openweathermap.org/data/2.5/weather",
     FORECAST_BASE_URL: "https://api.openweathermap.org/data/2.5/forecast",
     GEO_BASE_URL: "https://api.openweathermap.org/geo/1.0/direct",
 
-    // MOVIE API KEYS (funktionieren bereits)
-    MOVIE_API_KEY: "d441edaab7433789dd41dc91e12a69f8", // Aktiver Demo Key
+    MOVIE_API_KEY: "DEMO_KEY_PLEASE_ADD_REAL_KEY_IN_CONFIG_JS",
     MOVIE_API_BASE: "https://api.themoviedb.org/3",
     MOVIE_IMAGE_BASE: "https://image.tmdb.org/t/p/w500",
   };
@@ -1846,3 +1841,202 @@ function closeMovieModal() {
     setTimeout(() => modal.remove(), 300);
   }
 }
+
+// =======================================
+// CONTACT FORM FUNKTIONEN
+// =======================================
+
+function initContactForm() {
+  const contactForm = document.getElementById("contactForm");
+
+  if (!contactForm) {
+    return; // Kein Kontaktformular auf dieser Seite
+  }
+
+  console.log("✅ Contact Form gefunden - initialisiere...");
+
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault(); // Verhindert normale Form-Submission
+
+    console.log("📧 Kontaktformular wird verarbeitet...");
+
+    // Form-Daten sammeln
+    const formData = new FormData(contactForm);
+    const name = formData.get("name").trim();
+    const email = formData.get("email").trim();
+    const message = formData.get("message").trim();
+
+    // Validierung
+    if (!name || !email || !message) {
+      showFormMessage("Bitte fülle alle Felder aus.", "error");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      showFormMessage("Bitte gib eine gültige E-Mail-Adresse ein.", "error");
+      return;
+    }
+
+    // Button auf Loading setzen
+    const submitBtn = contactForm.querySelector(".submit-btn");
+    const originalText = submitBtn.innerHTML;
+    submitBtn.classList.add("loading");
+    submitBtn.innerHTML =
+      '<span class="btn-icon">⏳</span><span class="btn-text">Sending</span>';
+    submitBtn.disabled = true;
+
+    // mailto: Link erstellen und öffnen
+    setTimeout(() => {
+      const subject = encodeURIComponent(`Message from ${name} via Portfolio`);
+      const body = encodeURIComponent(`Hi Milos,
+
+${message}
+
+Best regards,
+${name}
+
+---
+Email: ${email}
+Sent via your portfolio contact form`);
+
+      const mailtoLink = `mailto:milos.vidakovic@students.bfh.ch?subject=${subject}&body=${body}`;
+
+      // E-Mail-Client öffnen
+      window.location.href = mailtoLink;
+
+      // Erfolgsmeldung anzeigen
+      showFormMessage("E-Mail-Client wird geöffnet! 📧", "success");
+
+      // Formular zurücksetzen
+      contactForm.reset();
+
+      // Button zurücksetzen
+      submitBtn.classList.remove("loading");
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+
+      console.log("✅ E-Mail erfolgreich vorbereitet!");
+    }, 1000); // Kurze Verzögerung für UX
+  });
+}
+
+// E-Mail Validierung
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Nachrichten anzeigen
+function showFormMessage(message, type = "info") {
+  // Entferne existierende Nachrichten
+  const existingMessage = document.querySelector(".form-message");
+  if (existingMessage) {
+    existingMessage.remove();
+  }
+
+  // Erstelle neue Nachricht
+  const messageDiv = document.createElement("div");
+  messageDiv.className = `form-message form-message-${type}`;
+  messageDiv.innerHTML = `
+    <div class="message-content">
+      <span class="message-icon">${
+        type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️"
+      }</span>
+      <span class="message-text">${message}</span>
+    </div>
+  `;
+
+  // CSS für die Nachricht
+  messageDiv.style.cssText = `
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: ${
+      type === "success" ? "#d4edda" : type === "error" ? "#f8d7da" : "#d1ecf1"
+    };
+    color: ${
+      type === "success" ? "#155724" : type === "error" ? "#721c24" : "#0c5460"
+    };
+    border: 1px solid ${
+      type === "success" ? "#c3e6cb" : type === "error" ? "#f5c6cb" : "#bee5eb"
+    };
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    max-width: 300px;
+    font-weight: 500;
+  `;
+
+  // Nachricht zum DOM hinzufügen
+  document.body.appendChild(messageDiv);
+
+  // Animation einblenden
+  setTimeout(() => {
+    messageDiv.style.opacity = "1";
+    messageDiv.style.transform = "translateX(0)";
+  }, 100);
+
+  // Nach 4 Sekunden ausblenden
+  setTimeout(() => {
+    messageDiv.style.opacity = "0";
+    messageDiv.style.transform = "translateX(100%)";
+    setTimeout(() => {
+      if (messageDiv.parentNode) {
+        messageDiv.parentNode.removeChild(messageDiv);
+      }
+    }, 300);
+  }, 4000);
+}
+
+// CSS für message-content
+const messageStyles = document.createElement("style");
+messageStyles.textContent = `
+  .message-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .message-icon {
+    font-size: 18px;
+  }
+  
+  .message-text {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  /* Dark Mode Support */
+  [data-theme="dark"] .form-message {
+    background: var(--bg-card) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+  }
+`;
+document.head.appendChild(messageStyles);
+
+// =======================================
+// INITIALIZATION
+// =======================================
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("🚀 JavaScript wird ausgeführt!");
+  console.log("🔧 Initialisiere alle Komponenten...");
+
+  initNavigation();
+  initDarkMode();
+  initGallery();
+  initScrollEffect();
+  initContactForm();
+
+  if (document.querySelector(".api-showcase")) {
+    console.log("📊 API Showcase Seite erkannt - initialisiere API Tabs");
+    initAPITabs();
+  }
+
+  console.log("✅ Alle Komponenten erfolgreich initialisiert!");
+});
