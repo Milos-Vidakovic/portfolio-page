@@ -16,6 +16,8 @@ Mein persönliches Portfolio als Wirtschaftsinformatik-Student an der BFH. Es ze
 - Krypto-Tracker (CoinGecko API) 
 - Film-Suchmaschine (TMDB API)
 
+Da API Keys für die OpenWeather und TMDB API benötigt werden, stelle ich seperat ein config.js file zur Verfügung. Nachdem dieses in das Repository geladen wurde funktionieren diese API's einwandfrei ohne Fehlermeldung.
+
 **Contact** - Funktionales Kontaktformular mit Validierung
 
 ## Technologien
