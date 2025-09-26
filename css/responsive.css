@@ -1,4 +1,6 @@
-/* Responsive Styles - Korrigierte Version */
+/* ==============================================
+   RESPONSIVE STYLES - MOBILE OPTIMIERUNG
+   ============================================== */
 
 /* Große Bildschirme (Laptops, Desktops) */
 @media screen and (max-width: 1200px) {
@@ -42,7 +44,9 @@
   }
 }
 
-/* === KRITISCHER FIX: Mobile Navigation === */
+/* ==============================================
+   KRITISCHER FIX: MOBILE NAVIGATION
+   ============================================== */
 @media screen and (max-width: 768px) {
   /* Body Padding für kürzeren Header */
   body {
@@ -227,7 +231,9 @@
   }
 }
 
-/* === ZUSÄTZLICHE FIXES === */
+/* ==============================================
+   ZUSÄTZLICHE FIXES
+   ============================================== */
 
 /* Logo bleibt immer sichtbar und zugänglich */
 .logo {
@@ -301,4 +307,240 @@ html {
 [data-theme="dark"] .theme-toggle:focus,
 [data-theme="dark"] .nav-toggle:focus {
   outline-color: var(--primary-color);
+}
+
+/* ==============================================
+   GALERIE RESPONSIVE ANPASSUNGEN
+   ============================================== */
+
+/* Große Bildschirme */
+@media screen and (min-width: 1200px) {
+  .photo-gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet Anpassungen */
+@media screen and (max-width: 992px) {
+  .portrait-img {
+    width: 180px;
+    height: 180px;
+  }
+
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .gallery-img {
+    height: 200px;
+  }
+
+  .interests-section h3 {
+    font-size: 1.8rem;
+  }
+
+  .section-title h4 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Mobile Anpassungen */
+@media screen and (max-width: 768px) {
+  .portrait-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-intro {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .interests-section h3 {
+    font-size: 1.6rem;
+  }
+
+  .section-title h4 {
+    font-size: 1.2rem;
+  }
+
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .gallery-img {
+    height: 180px;
+  }
+}
+
+/* Sehr kleine Bildschirme */
+@media screen and (max-width: 480px) {
+  .portrait-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero h2 {
+    font-size: 1.25rem;
+  }
+
+  .photo-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-img {
+    height: 160px;
+  }
+
+  .gallery-caption {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* ==============================================
+   EDUCATION SEITE RESPONSIVE ANPASSUNGEN
+   ============================================== */
+
+/* Tablet */
+@media screen and (max-width: 768px) {
+  .timeline::before {
+    left: 20px;
+  }
+
+  .timeline-item {
+    padding-left: 60px;
+  }
+
+  .timeline-marker {
+    left: 8px;
+  }
+
+  .timeline-dot {
+    width: 16px;
+    height: 16px;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .timeline-date {
+    margin-top: var(--spacing-xs);
+  }
+
+  .subjects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .achievements {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .timeline {
+    padding: var(--spacing-md) 0;
+  }
+
+  .timeline-content {
+    padding: var(--spacing-md);
+  }
+
+  .timeline-content::before {
+    display: none;
+  }
+
+  .timeline-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .education h2 {
+    font-size: 2rem;
+  }
+}
+
+/* ==============================================
+   CONTACT SEITE RESPONSIVE ANPASSUNGEN
+   ============================================== */
+
+/* Tablet */
+@media screen and (max-width: 992px) {
+  .contact-header h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .contact {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .contact-form {
+    padding: var(--spacing-lg);
+  }
+
+  .contact-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .contact-header p {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: var(--spacing-sm);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: 1rem;
+  }
+}
+
+/* Sehr kleine Bildschirme */
+@media screen and (max-width: 480px) {
+  .contact-form {
+    padding: var(--spacing-md);
+  }
+
+  .contact-header {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .contact-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 0.9rem;
+  }
 }
